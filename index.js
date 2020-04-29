@@ -1,6 +1,6 @@
 const axios = require("axios");
 const inquirer = require("inquirer");
-const util = require("util");
+const fs = require("fs");
 
 let gitHubUserData;
 let gitHubRepos;
@@ -25,6 +25,7 @@ function verifyGitHubAccount(username) {
         .catch(err => {
             reject(new Error(`GitHub username ${username} does not exist`));
         })
+        // Get user's repo data
         .then(reposUrl => {
         
             axios
@@ -38,6 +39,8 @@ function verifyGitHubAccount(username) {
                 }
 
                 gitHubRepos = reposData;
+                
+                questions[1].choices = reposData.map(repo => repo.name);
 
                 resolve(true);
             })
@@ -45,7 +48,50 @@ function verifyGitHubAccount(username) {
     })
 }
 
+// Filter callback for repo selection question. Sets defaults for subsequent
+// questions based on selected repo
+function setRepoDefaults(repoName) {
+
+    return new Promise((resolve,reject) => {
+
+        selectedRepo = gitHubRepos.find(repo => repo.name == repoName);
+
+        // Set repo name and description as defaults for Title and Description 
+        // question
+        questions[2].default = selectedRepo.name;
+        questions[3].default = selectedRepo.description;
+
+        // Get contributors and tags from repo
+        axios
+        .all([
+            axios.get(selectedRepo.contributors_url),
+            axios.get(selectedRepo.tags_url)
+        ])
+        .then(respArr => {
+            // Set repo contributors as default for Contributors question
+            questions[7].default = respArr[0].data.map(contributor => contributor.login).join(',');
+
+            resolve(true);
+        })
+        .catch(err => {
+            reject(new Error("Could not set defaults"));
+        });
+    })
+}
+
 const questions = [
+    {
+        name: "username",
+        message: "What is your GitHub username?",
+        default: "joel-clifford-bootcamp",
+        validate: verifyGitHubAccount
+    },
+    {
+        type: "list",
+        name: "repoName",
+        message: "Select the project repo:",
+        filter:setRepoDefaults
+    },
     {
         name: "title",
         message: "Enter a project title:",
@@ -66,7 +112,7 @@ const questions = [
         type: "list",
         name: "lisence",
         message: "Select license type:",
-        choices: ["public","permissive","lpgl","copyleft","proprietary"]
+        choices: ["copyleft","lpgl","MIT","permissive","proprietary","public"]
     },
     {
         name: "contributing",
@@ -83,50 +129,10 @@ function writeToFile(fileName, data) {
 
 function init() {
 
-    inquirer.prompt({
-            name: "username",
-            message: "What is your GitHub username?",
-            default: "joel-clifford-bootcamp",
-            validate: verifyGitHubAccount
-    })
-    // Retrieve repo corresponding to username
-    .then(resp => {
+    inquirer.prompt(questions).then(resp => {
 
-        const repoPrompt = [{type: "list",
-            name: "repoName",
-            message: "Select the project repo:",
-            choices: gitHubRepos.map(repo => repo.name)}];
 
-        // Prompt user to select which repo the README is for
-        inquirer
-        .prompt(repoPrompt)
-        .then(resp => {
-
-            selectedRepo = gitHubRepos.find(repo => repo.name == resp.repoName);
-
-            // Set repo name and description as defaults for Title and Description 
-            // question
-            questions[0].default = selectedRepo.name;
-            questions[1].default = selectedRepo.description;
-
-            // Get contributors and tags from repo
-            axios
-            .all([
-                axios.get(selectedRepo.contributors_url),
-                axios.get(selectedRepo.tags_url)
-            ])
-            .then(respArr => {
-                // Set repo contributors as default for Contributors question
-                questions[5].default = respArr[0].data.map(contributor => contributor.login).join(',');
-
-                inquirer
-                .prompt(questions)
-                .then(resp => {
-                
-                })
-            })
-        })
-    })
+    });
 }
 
 init();
