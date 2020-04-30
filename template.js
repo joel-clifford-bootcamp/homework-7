@@ -1,30 +1,30 @@
 module.exports.getReadMe = (userData,repoData,responses) => {
 
-return `#${responses.title}
+return `# ${responses.title}
 
 ${responses.description}
 
-##Contents
+## Contents
 
 
 
 
-##Installation Instructions
+## Installation Instructions
 ${responses.installation}
 
-##Usage
+## Usage
 ${responses.usage}
 
 License: ${responses.license}
 
-##Contributors
+## Contributors
 ${responses.contributors}
 
-##Tests
+## Tests
 ${responses.tests}
 
-##Questions
-Contatct: ${userData.login};
+## Questions
+Contatct: ${userData.login}
 ![profile image]
 (${userData.avatar_url})
 

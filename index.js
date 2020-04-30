@@ -59,8 +59,7 @@ function setRepoDefaults(repoName) {
 
         // Set repo name and description as defaults for Title and Description 
         // question
-        questions[2].default = selectedRepo.name;
-        questions[3].default = selectedRepo.description;
+        questions[2].default = selectedRepo.description;
 
         // Get contributors and tags from repo
         axios

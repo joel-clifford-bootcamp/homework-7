@@ -1,28 +1,28 @@
-#homework-3
-
-Password Generator
-
-##Contents
+# Password Generator
 
 
 
-
-##Installation Instructions
-
-
-##Usage
+## Contents
 
 
-License: public
 
-##Contributors
+
+## Installation Instructions
+
+
+## Usage
+
+
+License: copyleft
+
+## Contributors
 joel-clifford-bootcamp
 
-##Tests
+## Tests
 
 
-##Questions
-Contatct: joel-clifford-bootcamp;
+## Questions
+Contatct: joel-clifford-bootcamp
 ![profile image]
 (https://avatars1.githubusercontent.com/u/59773595?v=4)
 
