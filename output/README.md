@@ -18,13 +18,17 @@
 License: public
 
 ### Contributors
-ErikBle,joel-clifford-bootcamp,MG-cpu90,BBoutet1
+ErikBle
+joel-clifford-bootcamp
+MG-cpu90
+BBoutet1
 
 ### Tests
 
 
 ### Questions
 Contatct: joel-clifford-bootcamp
+
 ![profile image](https://avatars1.githubusercontent.com/u/59773595?v=4)
 
 Email: null(mailto:null?subject=[GitHub]ReciPlease)
