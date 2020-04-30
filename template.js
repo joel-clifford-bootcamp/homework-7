@@ -4,30 +4,31 @@ return `# ${responses.title}
 
 ${responses.description}
 
-## Contents
+### Contents
+1. [Installation Instructions](#installation-instructions)
+2. [Usage](#usage)
+3. [Contributors](#contributors)
+4. [Tests](#tests)
+5. [Questions](#questions)
 
-
-
-
-## Installation Instructions
+### Installation Instructions
 ${responses.installation}
 
-## Usage
+### Usage
 ${responses.usage}
 
 License: ${responses.license}
 
-## Contributors
+### Contributors
 ${responses.contributors}
 
-## Tests
+### Tests
 ${responses.tests}
 
-## Questions
+### Questions
 Contatct: ${userData.login}
-![profile image]
-(${userData.avatar_url})
+![profile image](${userData.avatar_url})
 
-Email: ${userData.email}
+Email: [${userData.email}](mailto:${userData.email}?subject=[GitHub]${responses.title.replace(" ","%20")})
 `
 }
