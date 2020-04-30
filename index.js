@@ -1,6 +1,7 @@
 const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require("fs");
+const template = require('./template.js');
 
 let gitHubUserData;
 let gitHubRepos;
@@ -71,7 +72,7 @@ function setRepoDefaults(repoName) {
             // Set repo contributors as default for Contributors question
             questions[7].default = respArr[0].data.map(contributor => contributor.login).join(',');
 
-            resolve(true);
+            resolve(repoName);
         })
         .catch(err => {
             reject(new Error("Could not set defaults"));
@@ -110,12 +111,12 @@ const questions = [
     },
     {
         type: "list",
-        name: "lisence",
+        name: "license",
         message: "Select license type:",
         choices: ["copyleft","lpgl","MIT","permissive","proprietary","public"]
     },
     {
-        name: "contributing",
+        name: "contributors",
         message: "Enter contibutors:"
     },
     {
@@ -131,8 +132,24 @@ function init() {
 
     inquirer.prompt(questions).then(resp => {
 
-
+        generateReadMe(resp);
     });
+}
+
+function generateReadMe(responses){
+
+    fs.writeFile
+    (
+        "./output/README.md",
+        template.getReadMe(gitHubUserData,selectedRepo,responses),
+        (err) => {
+            if(err)
+                console.log("An error occured while writing file");
+            else
+                console.log("File saved");
+        }
+    );
+
 }
 
 init();
