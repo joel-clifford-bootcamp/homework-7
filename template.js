@@ -1,8 +1,13 @@
-module.exports.getReadMe = (userData,repoData,responses) => {
+module.exports.getReadMe = (userData,responses) => {
 
-return `# ${responses.title}
+function noneIfNone(response)
+{
+    return response.length === 0 ? 'None' : response
+}
 
-${responses.description}
+return `# ${noneIfNone(responses.title)}
+
+${noneIfNone(responses.description)}
 
 ### Contents
 1. [Installation Instructions](#installation-instructions)
@@ -11,24 +16,31 @@ ${responses.description}
 4. [Tests](#tests)
 5. [Questions](#questions)
 
-### Installation Instructions
-${responses.installation}
 
-### Usage
-${responses.usage}
+## Installation Instructions
+${noneIfNone(responses.installation)}
 
-License: ${responses.license}
+## Usage
+${noneIfNone(responses.usage)}
 
-### Contributors
-${responses.contributors}
 
-### Tests
-${responses.tests}
+## License
+${responses.license}
 
-### Questions
+
+## Contributors
+${noneIfNone(responses.contributors)}
+
+
+## Tests
+${noneIfNone(responses.tests)}
+
+
+## Questions
 Contatct: ${userData.login}
+
 ![profile image](${userData.avatar_url})
 
-Email: [${userData.email}](mailto:${userData.email}?subject=[GitHub]${responses.title.replace(" ","%20")})
+Email: <${responses.email}>
 `
 }
