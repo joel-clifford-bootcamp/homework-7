@@ -1,6 +1,6 @@
-# ReciPlease
+# NoSQL: Workout Tracker
 
-
+Enter exercieses. View stats
 
 ### Contents
 1. [Installation Instructions](#installation-instructions)
@@ -9,22 +9,29 @@
 4. [Tests](#tests)
 5. [Questions](#questions)
 
-### Installation Instructions
+
+## Installation Instructions
+run npm install
+
+## Usage
+None
 
 
-### Usage
+## License
+MIT
 
 
-License: public
-
-### Contributors
-ErikBle,joel-clifford-bootcamp,MG-cpu90,BBoutet1
-
-### Tests
+## Contributors
+joelc29
 
 
-### Questions
+## Tests
+None
+
+
+## Questions
 Contatct: joel-clifford-bootcamp
+
 ![profile image](https://avatars1.githubusercontent.com/u/59773595?v=4)
 
-Email: null(mailto:null?subject=[GitHub]ReciPlease)
+Email: <joel.clifford.bootcamp@gmail.com>
