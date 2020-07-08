@@ -2,52 +2,45 @@ const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require("fs");
 const template = require('./template.js');
+const validator = require('email-validator');
 
 let gitHubUserData;
 let gitHubRepos;
 let selectedRepo;
 
 // Verify that a given GitHub exists and has at least one repo
-function verifyGitHubAccount(username) {
+async function verifyGitHubAccount(username) {
 
-    return new Promise((resolve,reject) => {
+    if(username.length === 0) 
+        return 'username cannot be blank';
+    else{
 
-        url = `https://api.github.com/users/${username}`;
+        const url = `https://api.github.com/users/${username}`;
 
         // User GitHubUser Data
-        axios
-        .get(url)
-        .then(resp => {
+        const userResp = await axios.get(url)
 
-            gitHubUserData = resp.data;
+        gitHubUserData = userResp.data;
 
-            return resp.data.repos_url;
-        })
-        .catch(err => {
-            reject(new Error(`GitHub username ${username} does not exist`));
-        })
-        // Get user's repo data
-        .then(reposUrl => {
+        reposUrl = userResp.data.repos_url;
+
+        if(typeof reposUrl === 'undefined')
+            return `GitHub username ${username} does not exist`;
+
+        reposResp = await axios.get(reposUrl);
+
+        const reposData = reposResp.data;
+
+        if(reposData.length === 0)
+            return `GitHub user ${username} has no repos`;
+
+        gitHubRepos = reposData;
         
-            axios
-            .get(reposUrl)
-            .then(resp => {
+        questions[1].choices = reposData.map(repo => repo.name);
 
-                const reposData = resp.data;
-
-                if(reposData.length === 0){
-                    reject(new Error(`GitHub user ${username} has no repos`));
-                }
-
-                gitHubRepos = reposData;
-                
-                questions[1].choices = reposData.map(repo => repo.name);
-
-                resolve(true);
-            })
-        })
-    })
-}
+        return true;
+    }
+}   
 
 // Filter callback for repo selection question. Sets defaults for subsequent
 // questions based on selected repo
@@ -77,6 +70,14 @@ function setRepoDefaults(repoName) {
             reject(new Error("Could not set defaults"));
         });
     })
+}
+
+function validateEmail(email) {
+  
+    if(validator.validate(email))
+        return true;
+
+    return `${email} is not a valid email`;
 }
 
 const questions = [
@@ -121,11 +122,13 @@ const questions = [
     {
         name: "tests",
         message: "Enter tests:"
+    },
+    {
+        name: "email",
+        message: "Enter contact email:",
+        validate: validateEmail
     }
 ];
-
-function writeToFile(fileName, data) {
-}
 
 function init() {
 
@@ -140,7 +143,7 @@ function generateReadMe(responses){
     fs.writeFile
     (
         "./output/README.md",
-        template.getReadMe(gitHubUserData,selectedRepo,responses),
+        template.getReadMe(gitHubUserData,responses),
         (err) => {
             if(err)
                 console.log("An error occured while writing file");
@@ -148,7 +151,6 @@ function generateReadMe(responses){
                 console.log("File saved");
         }
     );
-
 }
 
 init();
