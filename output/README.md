@@ -21,8 +21,16 @@ None
 MIT
 
 
+<<<<<<< HEAD
 ## Contributors
 joelc29
+=======
+### Contributors
+ErikBle
+joel-clifford-bootcamp
+MG-cpu90
+BBoutet1
+>>>>>>> 0e8bc6a5ffe3f5df939d17d93236f327b6f3d71b
 
 
 ## Tests
